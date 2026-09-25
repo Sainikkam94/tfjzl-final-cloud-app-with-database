@@ -20,43 +20,45 @@ class QuestionInline(admin.StackedInline):
     extra = 1
 
 
-@admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ("text", "course", "marks")
     list_filter = ("course",)
     inlines = [ChoiceInline]
 
 
-@admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     list_display = ("name", "instructor")
     search_fields = ("name", "description")
     inlines = [QuestionInline]
 
 
-@admin.register(Lesson)
 class LessonAdmin(admin.ModelAdmin):
     list_display = ("title", "duration_minutes")
     search_fields = ("title", "content")
 
 
-@admin.register(Instructor)
 class InstructorAdmin(admin.ModelAdmin):
     list_display = ("name", "email")
 
 
-@admin.register(Learner)
 class LearnerAdmin(admin.ModelAdmin):
     list_display = ("user",)
 
 
-@admin.register(Choice)
 class ChoiceAdmin(admin.ModelAdmin):
     list_display = ("question", "text", "is_correct")
     list_filter = ("is_correct",)
 
 
-@admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     list_display = ("learner", "course", "score", "total_marks", "submitted_at")
     list_filter = ("course",)
+
+
+admin.site.register(Instructor, InstructorAdmin)
+admin.site.register(Learner, LearnerAdmin)
+admin.site.register(Course, CourseAdmin)
+admin.site.register(Lesson, LessonAdmin)
+admin.site.register(Question, QuestionAdmin)
+admin.site.register(Choice, ChoiceAdmin)
+admin.site.register(Submission, SubmissionAdmin)
