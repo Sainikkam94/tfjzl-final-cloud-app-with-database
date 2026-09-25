@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}{{ course.name }}{% endblock %}
+{% block content %}
+<div class="card shadow-sm mb-4">
+  <div class="card-body">
+    <h1 class="card-title">{{ course.name }}</h1>
+    <p class="lead">{{ course.description }}</p>
+    <p><strong>Instructor:</strong> {{ course.instructor.name }}</p>
+  </div>
+</div>
+
+<h2 class="mb-3">Related Lessons</h2>
+<div class="row g-3">
+{% for lesson in course.lessons.all %}
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5>{{ lesson.title }}</h5>
+        <p>{{ lesson.content }}</p>
+        <span class="badge bg-secondary">{{ lesson.duration_minutes }} minutes</span>
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <div class="col-12">
+    <div class="alert alert-warning">No lessons have been added yet.</div>
+  </div>
+{% endfor %}
+</div>
+
+{% if course.questions.exists %}
+<hr class="my-5">
+<h2>Assessment</h2>
+{% for question in course.questions.all %}
+<div class="card mb-3">
+  <div class="card-body">
+    <h5>Question {{ forloop.counter }}</h5>
+    <p>{{ question.text }}</p>
+    <form method="post" action="{% url 'submit' question.id %}">
+      {% csrf_token %}
+      {% for choice in question.choices.all %}
+      <div class="form-check">
+        <input class="form-check-input" type="radio" name="choice" value="{{ choice.id }}" id="choice{{ choice.id }}" required>
+        <label class="form-check-label" for="choice{{ choice.id }}">{{ choice.text }}</label>
+      </div>
+      {% endfor %}
+      <button class="btn btn-success mt-3" type="submit">Submit Answer</button>
+    </form>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

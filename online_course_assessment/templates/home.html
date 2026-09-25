@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Courses{% endblock %}
+{% block content %}
+<h1 class="mb-4">Online Courses</h1>
+<div class="row g-3">
+{% for course in courses %}
+  <div class="col-md-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-body">
+        <h5 class="card-title">{{ course.name }}</h5>
+        <p class="card-text">{{ course.description }}</p>
+        <a class="btn btn-primary" href="{% url 'course_details' course.id %}">View Course</a>
+      </div>
+    </div>
+  </div>
+{% empty %}
+  <div class="alert alert-info">Add a course from the Django admin.</div>
+{% endfor %}
+</div>
+{% endblock %}
